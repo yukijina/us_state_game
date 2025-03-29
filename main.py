@@ -3,22 +3,36 @@ import pandas as pd
 import time
 
 screen = turtle.Screen()
-screen.title("U.S. State Game")
+screen.title("U.S. State Game🇺🇸👏 (Type 'Exit' when you want to leave the game.)")
 image_path = "blank_states_img.gif"
 
 screen.addshape(image_path)
 turtle.shape(image_path)
-screen.title("U.S. State Game🇺🇸")
 
+
+data = pd.read_csv("50_states.csv")
+
+guess_states = []
+all_states = data.state.to_list()
 guess_states = []
 
 
 while len(guess_states) < 50: #50 states
   time.sleep(0.3) #delay textinput popup
   answer = (screen.textinput(title=f"{len(guess_states)}/50 States Correct", prompt="What's another state name?")).title()
-
-
-  data = pd.read_csv("50_states.csv")
+  
+  if answer == "Exit":
+    missing_states = []
+    for state in all_states:
+      if state not in guess_states:
+        missing_states.append(state)
+        
+        #save the missing sates to csv file
+        df = pd.DataFrame(missing_states)
+        df.to_csv("missing_states")
+    screen.title("Good job! A list of missing states is avaibale in missing_states.csv file👩‍🏫")
+    break
+    
   matched_state = data[data.state == answer]
 
   try:
@@ -39,18 +53,7 @@ while len(guess_states) < 50: #50 states
     t.clear()
 
 
-"""another way. If we use list"""
-#all_states = data.state.to_list()
-# if answer in all_states:
-#   t = turtle.Turtle()
-#   t.hideturtle()
-#   t.penup()
-#   matched_data = data[data.state == answer]
-#   t.goto(matched_data.x.item(), matched_data.y.item())
-#   t.pendown()
-#   t.pencolor("blue")
-#   t.write(answer)
-
 screen.exitonclick()
+
 
 
