@@ -22,14 +22,15 @@ while len(guess_states) < 50: #50 states
   answer = (screen.textinput(title=f"{len(guess_states)}/50 States Correct", prompt="What's another state name?")).title()
   
   if answer == "Exit":
-    missing_states = []
-    for state in all_states:
-      if state not in guess_states:
-        missing_states.append(state)
+    missing_states = [state for state in all_states if state not in guess_states]
+    # missing_states = []
+    # for state in all_states:
+    #   if state not in guess_states:
+    #     missing_states.append(state)
         
         #save the missing sates to csv file
-        df = pd.DataFrame(missing_states)
-        df.to_csv("missing_states")
+    df = pd.DataFrame(missing_states)
+    df.to_csv("missing_states")
     screen.title("Good job! A list of missing states is avaibale in missing_states.csv file👩‍🏫")
     break
     
